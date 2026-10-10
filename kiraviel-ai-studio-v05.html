@@ -1,0 +1,168 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>キラヴィエル AI Studio v0.5</title><style>:root{color-scheme:dark}*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#101827;color:#eef2ff;margin:0}main{max-width:820px;margin:auto;padding:16px}h1{font-size:1.45rem}h2{font-size:1.12rem}section{background:#1d293b;padding:16px;border-radius:14px;margin:14px 0}label{display:block;margin:12px 0 5px}input,textarea,select,button{width:100%;padding:12px;border-radius:9px;border:1px solid #526078;font:inherit}input,textarea,select{background:#101827;color:#fff}button{background:#a5b4fc;color:#111827;font-weight:700;margin-top:10px;cursor:pointer}button.secondary{background:#334155;color:#fff}small,.hint{color:#cbd5e1;font-size:.85rem}article{border-top:1px solid #475569;padding:14px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#0c1422;padding:12px;border-radius:8px;font-size:.83rem}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}.notice{background:#24334a;padding:10px;border-radius:9px}.tag{color:#a5b4fc}img{max-width:100%;max-height:240px;border-radius:8px}summary{cursor:pointer}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #a5b4fc} .production{margin-top:14px;padding:14px;border:1px solid #64748b;border-radius:12px;background:#152238}.production h4{margin:0 0 8px;color:#c7d2fe}.production textarea{min-height:100px}.production .note{font-size:.8rem;color:#cbd5e1}.production video{width:100%;max-height:320px;margin-top:8px;border-radius:8px}.production a{color:#c7d2fe;overflow-wrap:anywhere}.production .inline{display:flex;align-items:center;gap:8px;margin:8px 0}.production .inline input{width:auto}.production label{margin-top:9px}.production .actions button{margin-top:8px} 
+.v05tools{background:#111f34;border:1px solid #64748b;border-radius:12px;padding:14px;margin:12px 0}
+.v05tools textarea{min-height:105px}.v05tools .hint{margin-top:8px}.v05tools img{max-height:240px;max-width:100%;object-fit:contain;border-radius:8px}
+</style></head><body><main><h1>✦ キラヴィエル AI Studio <small>v0.5</small></h1><p class="notice">キャラクター設定・画像制作・動画制作管理版です。歌詞からの下書きはAI未使用、AI監督はCloudflare経由で動作します。動画生成APIはまだ未接続です。</p><section><h2>① 楽曲とキャラクター</h2><label for="song">楽曲名</label><input id="song" value="セイシュン☆アクセル"><label for="character">キャラクター名</label><input id="character" value="司"><label for="profile">外見・衣装の維持条件</label><textarea id="profile" rows="3" placeholder="基準画像の顔・髪型・衣装を維持"></textarea><label for="lyrics">歌詞（行ごとにカット案を作成）</label><textarea id="lyrics" rows="7" placeholder="歌詞を貼り付け"></textarea><label for="image">基準画像（プレビューのみ）</label><input id="image" type="file" accept="image/*"><img id="preview" alt="基準画像プレビュー" hidden><p class="hint">画像は外部送信しません。再読み込み後は選び直してください。未公開情報を共有端末に入力しないでください。</p></section><section><h2>①-B キャラクター制作台帳（v0.5）</h2>
+<p class="hint">基準画像そのものは端末内で一時表示のみ。人物設定はこの端末に保存されます。v0.4のデータは「JSON復元」で読み込んでください。</p>
+<label for="v05Identity">固定したい顔・髪型・瞳・特徴</label><textarea id="v05Identity" rows="3" placeholder="例：顔立ち、髪型、髪色、瞳の色、特徴的なアクセサリー"></textarea>
+<label for="v05Outfit">衣装・配色の固定条件</label><textarea id="v05Outfit" rows="3" placeholder="例：衣装、素材、配色、装飾、靴"></textarea>
+<label for="v05Negative">避けたい変化・破綻</label><textarea id="v05Negative" rows="2" placeholder="例：顔の変化、衣装の変更、指の破綻、別人化"></textarea>
+<div class="actions"><button id="v05IdentityCopy" class="secondary" type="button">キャラクター固定条件をコピー</button></div>
+</section><section><h2>② 絵コンテの下書き</h2><label for="autoduration">1カットの仮の長さ（秒）</label><input id="autoduration" type="number" min="2" max="15" step="1" value="5"><button id="draft">歌詞からカット案を作成（AI未使用）</button><p class="hint">歌詞の空行・[Verse]等の見出しを除き、最大30行から作成。正確な歌詞同期は後日実装します。既存カットは残して末尾に追加します。</p></section><section><h2>③ カットを手動追加</h2><label for="start">開始秒</label><input id="start" type="number" min="0" step="0.1" value="0"><label for="duration">長さ（秒）</label><input id="duration" type="number" min="1" max="30" step="0.1" value="5"><label for="scene">演出</label><textarea id="scene" rows="3" placeholder="夕暮れの屋上で司が微笑み、風で髪が揺れる"></textarea><label for="ratio">画面比率</label><select id="ratio"><option>16:9</option><option>9:16</option></select><button id="add">カットを追加</button></section><section><h2>④ カット一覧 <span id="count" class="tag"></span></h2><div id="shots"></div><div class="actions"><button class="secondary" id="export">JSON保存</button><button class="secondary" id="importButton">JSON復元</button></div><input type="file" id="import" accept=".json,application/json" hidden><button class="secondary" id="clear">全カット削除</button><p class="hint">カットの内容は編集・コピーできます。JSONをこまめに保存してください。ブラウザのデータ削除で端末内の保存内容は消えます。</p></section><section><h2>AI監督（v0.5）</h2><p>歌詞からAIが最大12カットの絵コンテを作成します。APIの利用料金が発生します。</p><label>Cloudflare Worker URL<input id="workerUrl" type="url" placeholder="https://xxxx.workers.dev"></label><label>アクセス用パスフレーズ<input id="accessPass" type="password" autocomplete="off" placeholder="Cloudflareに登録したパスフレーズ"></label><button id="aiDraft" type="button">AI監督に絵コンテを依頼</button><p id="aiStatus" role="status"></p><small>パスフレーズは保存しません。AI生成前に既存カットをJSON保存してください。未公開の歌詞を外部APIに送ることになります。</small></section><section><h2>⑤ 動画制作の進捗</h2><p class="hint">各カットの「動画制作」欄で、生成用プロンプト・進捗・メモ・動画URLを管理できます。動画ファイルは端末内でプレビューできますが、アップロード・保存はされません。</p><p id="progressSummary" role="status">カットの進捗を集計します。</p><button id="productionExport" type="button" class="secondary">制作指示書をテキスト保存</button><p class="hint">カット情報と制作メモはJSON保存にも含まれます。AI監督でカットを置き換える前にJSON保存してください。</p></section></main><script>
+'use strict';const $=id=>document.getElementById(id);let shots=[];try{const old=JSON.parse(localStorage.getItem('kiraviel_v05_shots')||'[]');if(Array.isArray(old))shots=old.filter(x=>x&&typeof x.scene==='string').slice(0,300)}catch{}for(const id of ['song','character','profile','lyrics']){const old=localStorage.getItem('kiraviel_v05_'+id);if(old!==null)$(id).value=old;$(id).addEventListener('input',()=>{try{localStorage.setItem('kiraviel_v05_'+id,$(id).value)}catch{alert('保存容量を確認してください。JSONでバックアップしてください。')}render()})}
+let imageUrl=null;$('image').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;if(imageUrl)URL.revokeObjectURL(imageUrl);imageUrl=URL.createObjectURL(f);$('preview').src=imageUrl;$('preview').hidden=false});
+function prompt(s){return `Create a cinematic anime music video shot for the fictional music project Kiraviel. Song: ${$('song').value}. Character: ${$('character').value}. Preserve the exact identity, face, hairstyle, outfit and colors of the supplied reference image. Character notes: ${$('profile').value||'Follow the approved reference image strictly.'}. Scene: ${s.scene}. Lyric cue: ${s.lyric||'none'}. Duration: ${s.duration} seconds. Aspect ratio: ${s.ratio}. Coherent natural movement, consistent anatomy, stable facial features, intentional camera movement, no added characters, no unwanted text, no watermark. Use the supplied character reference image; do not redesign the character.`}
+function save(){try{localStorage.setItem('kiraviel_v05_shots',JSON.stringify(shots))}catch{alert('端末の保存容量が不足しています。JSONで保存してください。')}render()}
+function field(parent,title,value,cb,multi=false){const label=document.createElement('label');label.textContent=title;const el=document.createElement(multi?'textarea':'input');if(multi)el.rows=3;el.value=value;el.addEventListener('change',()=>cb(el.value));parent.append(label,el)}
+function render(){const root=$('shots');root.replaceChildren();$('count').textContent=`${shots.length}カット`;if(!shots.length){root.textContent='まだカットがありません。';return}shots.forEach((s,i)=>{const a=document.createElement('article'),h=document.createElement('h3');h.textContent=`カット ${i+1}｜${s.start}〜${Number(s.start)+Number(s.duration)}秒`;a.append(h);field(a,'演出',s.scene,v=>{s.scene=v;save()},true);field(a,'歌詞キュー',s.lyric||'',v=>{s.lyric=v;save()});const details=document.createElement('details'),sum=document.createElement('summary');sum.textContent='英語プロンプトを表示';const pre=document.createElement('pre');pre.textContent=prompt(s);details.append(sum,pre);a.append(details);const copy=document.createElement('button');copy.textContent='プロンプトをコピー';copy.onclick=async()=>{try{await navigator.clipboard.writeText(prompt(s));copy.textContent='コピーしました'}catch{alert('コピーできません。プロンプトを開いて選択してください。')}};const del=document.createElement('button');del.className='secondary';del.textContent='このカットを削除';del.onclick=()=>{shots.splice(i,1);save()};a.append(copy,del);root.append(a)})}
+$('add').onclick=()=>{const start=Number($('start').value),duration=Number($('duration').value),scene=$('scene').value.trim();if(!scene||!Number.isFinite(start)||start<0||!Number.isFinite(duration)||duration<1||duration>30){alert('演出、開始秒、長さ（1〜30秒）を確認してください');return}shots.push({start,duration,scene,ratio:$('ratio').value,lyric:''});shots.sort((a,b)=>Number(a.start)-Number(b.start));save();$('start').value=start+duration;$('scene').value=''};
+function sceneFor(line,i){if(/走|駆|アクセル|Go!|飛び出/.test(line))return '疾走感のある街並み。キャラクターが前に走り出す。低い位置からの追跡カメラ。';if(/屋上|空|風|フェンス/.test(line))return '学校の屋上、広い青空と風。キャラクターの髪が自然に揺れる。ゆっくりしたカメラ移動。';if(/笑|君|伝え|願い/.test(line))return 'キャラクターの表情を中心に、温かな光の中で感情を丁寧に映す。';return `歌詞「${line}」の感情に合わせたアニメMVの場面。構図と動作を具体化する。`}
+$('draft').onclick=()=>{const lines=$('lyrics').value.split(/\r?\n/).map(x=>x.trim()).filter(x=>x&&!/^\[.*\]$/.test(x)).slice(0,30);if(!lines.length){alert('先に歌詞を入力してください');return}const d=Number($('autoduration').value);if(!Number.isFinite(d)||d<2||d>15){alert('長さは2〜15秒で指定してください');return}if(shots.length+lines.length>300){alert('カット数が多すぎます');return}let start=shots.reduce((m,s)=>Math.max(m,Number(s.start)+Number(s.duration)),0);lines.forEach((line,i)=>{shots.push({start,duration:d,scene:sceneFor(line,i),lyric:line,ratio:$('ratio').value});start+=d});save();alert(`${lines.length}カットの下書きを追加しました。各カットの演出を確認・編集してください。`)};
+$('export').onclick=()=>{const data={version:'0.5',song:$('song').value,character:$('character').value,profile:$('profile').value,lyrics:$('lyrics').value,v05Identity:$('v05Identity').value,v05Outfit:$('v05Outfit').value,v05Negative:$('v05Negative').value,shots:shots.map(s=>({...s,prompt:prompt(s)}))};const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kiraviel-storyboard-v05.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000)};
+$('importButton').onclick=()=>$('import').click();$('import').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>2000000)throw Error('ファイルが大きすぎます');const data=JSON.parse(await f.text());if(!Array.isArray(data.shots)||data.shots.length>300||data.shots.some(s=>!s||typeof s.scene!=='string'||!Number.isFinite(Number(s.start))||!Number.isFinite(Number(s.duration))))throw Error('カット形式が不正です');if(!confirm('現在の内容をJSONの内容で置き換えますか？'))return;for(const id of ['song','character','profile','lyrics','v05Identity','v05Outfit','v05Negative']){if(typeof data[id]==='string'){$(id).value=data[id];localStorage.setItem('kiraviel_v05_'+id,data[id])}}shots=data.shots.map(s=>({start:Number(s.start),duration:Number(s.duration),scene:s.scene,lyric:typeof s.lyric==='string'?s.lyric:'',ratio:s.ratio==='9:16'?'9:16':'16:9'}));save()}catch(err){alert('復元できません：'+err.message)}finally{e.target.value=''}};
+$('clear').onclick=()=>{if(confirm('すべてのカットを削除しますか？')){shots=[];save()}};render();
+
+const storedWorker=localStorage.getItem('kiraviel_worker_url');if(storedWorker)$('workerUrl').value=storedWorker;
+$('workerUrl').addEventListener('change',()=>localStorage.setItem('kiraviel_worker_url',$('workerUrl').value.trim()));
+$('aiDraft').onclick=async()=>{const btn=$('aiDraft'),status=$('aiStatus');const url=$('workerUrl').value.trim(),pass=$('accessPass').value;
+if(!/^https:\/\/[a-z0-9.-]+\.workers\.dev\/?$/i.test(url)){status.textContent='正しい workers.dev のURLを入力してください';return}
+if(!pass||!$('lyrics').value.trim()){status.textContent='パスフレーズと歌詞を入力してください';return}
+if(!confirm('歌詞とキャラクター設定をAIへ送信します。最大12カットを生成しますか？'))return;
+btn.disabled=true;status.textContent='AI監督が絵コンテを作成中…';
+try{const r=await fetch(url.replace(/\/$/,'')+'/storyboard',{method:'POST',headers:{'Content-Type':'application/json','X-Studio-Passphrase':pass},body:JSON.stringify({song:$('song').value,character:$('character').value,profile:$('profile').value,lyrics:$('lyrics').value,ratio:$('ratio').value})});const data=await r.json();if(!r.ok)throw Error(data.error||'サーバーエラー');if(!Array.isArray(data.shots)||!data.shots.length)throw Error('カットを受け取れませんでした');const fresh=data.shots.slice(0,12).map((x,i)=>({start:i*5,duration:5,scene:String(x.scene||'').slice(0,1000)+'\n[AI prompt] '+String(x.prompt||'').slice(0,1600),lyric:String(x.lyric||'').slice(0,180),ratio:$('ratio').value})).filter(x=>x.scene.trim());if(!fresh.length)throw Error('生成結果が空です');if(!confirm(`${fresh.length}カットを受信しました。現在のカットを置き換えますか？（先にJSONバックアップ推奨）`)){status.textContent='生成しましたが反映はキャンセルしました';return}shots=fresh;save();status.textContent=`${fresh.length}カットを保存しました。開始秒は仮の5秒間隔です。`;}catch(e){status.textContent='エラー: '+e.message}finally{btn.disabled=false}
+};
+
+// v0.5: Local-only production workflow. No video API calls.
+const productionStates=['未着手','プロンプト準備中','生成待ち','生成中','確認中','完成','要修正'];
+const baseRender=render;
+render=function(){
+  baseRender();
+  const cards=document.querySelectorAll('#shots article');
+  cards.forEach((article,i)=>{
+    const shot=shots[i];if(!shot)return;
+    if(!shot.production||typeof shot.production!=='object')shot.production={};
+    const prod=shot.production;
+    const panel=document.createElement('div');panel.className='production';
+    const title=document.createElement('h4');title.textContent='🎬 動画制作';panel.append(title);
+    const statusLabel=document.createElement('label');statusLabel.textContent='制作状況';
+    const statusSelect=document.createElement('select');
+    productionStates.forEach(state=>{const option=document.createElement('option');option.value=state;option.textContent=state;statusSelect.append(option)});
+    statusSelect.value=productionStates.includes(prod.status)?prod.status:'未着手';
+    statusSelect.addEventListener('change',()=>{prod.status=statusSelect.value;save()});panel.append(statusLabel,statusSelect);
+    const promptLabel=document.createElement('label');promptLabel.textContent='動画生成用プロンプト（編集可）';
+    const promptInput=document.createElement('textarea');promptInput.rows=6;
+    promptInput.value=typeof prod.videoPrompt==='string'?prod.videoPrompt:prompt(shot);
+    promptInput.addEventListener('change',()=>{prod.videoPrompt=promptInput.value;save()});
+    panel.append(promptLabel,promptInput);
+    const promptCopy=document.createElement('button');promptCopy.textContent='動画用プロンプトをコピー';
+    promptCopy.onclick=async()=>{try{await navigator.clipboard.writeText(promptInput.value);promptCopy.textContent='コピーしました'}catch{alert('コピーできません。テキストを選択してください。')}};
+    panel.append(promptCopy);
+    const memoLabel=document.createElement('label');memoLabel.textContent='制作メモ';
+    const memo=document.createElement('textarea');memo.rows=3;memo.placeholder='生成サービス、使用モデル、修正点など';memo.value=typeof prod.memo==='string'?prod.memo:'';
+    memo.addEventListener('change',()=>{prod.memo=memo.value;save()});panel.append(memoLabel,memo);
+    const urlLabel=document.createElement('label');urlLabel.textContent='完成動画のURL（任意）';
+    const videoUrl=document.createElement('input');videoUrl.type='url';videoUrl.placeholder='https://...';videoUrl.value=typeof prod.videoUrl==='string'?prod.videoUrl:'';
+    const urlLink=document.createElement('div');
+    function refreshLink(){urlLink.replaceChildren();const value=videoUrl.value.trim();if(!value)return;try{const u=new URL(value);if(!['https:','http:'].includes(u.protocol))throw Error();const a=document.createElement('a');a.href=u.href;a.target='_blank';a.rel='noopener noreferrer';a.textContent='保存した動画URLを開く';urlLink.append(a)}catch{urlLink.textContent='http:// または https:// のURLを入力してください'}}
+    videoUrl.addEventListener('change',()=>{prod.videoUrl=videoUrl.value.trim();refreshLink();save()});panel.append(urlLabel,videoUrl,urlLink);refreshLink();
+    const fileLabel=document.createElement('label');fileLabel.textContent='動画ファイルを一時プレビュー';
+    const file=document.createElement('input');file.type='file';file.accept='video/*';
+    const preview=document.createElement('video');preview.controls=true;preview.hidden=true;
+    let tempUrl=null;file.addEventListener('change',()=>{if(tempUrl)URL.revokeObjectURL(tempUrl);const f=file.files&&file.files[0];if(!f){preview.hidden=true;return}tempUrl=URL.createObjectURL(f);preview.src=tempUrl;preview.hidden=false});
+    const hint=document.createElement('p');hint.className='note';hint.textContent='動画ファイルは外部送信されず、ページを再読み込みすると選択が解除されます。';
+    panel.append(fileLabel,file,preview,hint);article.append(panel);
+  });
+  const done=shots.filter(s=>s.production&&s.production.status==='完成').length;
+  const working=shots.filter(s=>s.production&&s.production.status&&s.production.status!=='未着手'&&s.production.status!=='完成').length;
+  $('progressSummary').textContent=`全${shots.length}カット｜完成 ${done}｜制作中・要修正 ${working}｜未着手 ${shots.length-done-working}`;
+};
+$('productionExport').onclick=()=>{
+  const lines=[`キラヴィエル AI Studio v0.5 制作指示書`,`楽曲: ${$('song').value}`,`キャラクター: ${$('character').value}`,`外見・衣装: ${$('profile').value}`,''];
+  shots.forEach((s,i)=>{const p=s.production||{};lines.push(`【カット${i+1}】 ${s.start}〜${Number(s.start)+Number(s.duration)}秒 / ${s.ratio||'16:9'}`,`歌詞: ${s.lyric||''}`,`演出: ${s.scene}`,`制作状況: ${p.status||'未着手'}`,`動画生成用プロンプト:`,typeof p.videoPrompt==='string'?p.videoPrompt:prompt(s),`制作メモ: ${p.memo||''}`,`動画URL: ${p.videoUrl||''}`,'')});
+  const blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});const link=document.createElement('a');const u=URL.createObjectURL(blob);link.href=u;link.download='kiraviel-production-v05.txt';link.click();setTimeout(()=>URL.revokeObjectURL(u),3000);
+};
+// Preserve production data during JSON restore (the original importer intentionally normalizes shot fields).
+const importInput=$('import');
+importInput.onchange=async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>2000000)throw Error('ファイルが大きすぎます');const data=JSON.parse(await f.text());if(!Array.isArray(data.shots)||data.shots.length>300||data.shots.some(s=>!s||typeof s.scene!=='string'||!Number.isFinite(Number(s.start))||!Number.isFinite(Number(s.duration))))throw Error('カット形式が不正です');if(!confirm('現在の内容をJSONの内容で置き換えますか？'))return;for(const id of ['song','character','profile','lyrics','v05Identity','v05Outfit','v05Negative']){if(typeof data[id]==='string'){$(id).value=data[id];localStorage.setItem('kiraviel_v05_'+id,data[id])}}shots=data.shots.map(s=>({start:Number(s.start),duration:Number(s.duration),scene:s.scene,lyric:typeof s.lyric==='string'?s.lyric:'',ratio:s.ratio==='9:16'?'9:16':'16:9',production:s.production&&typeof s.production==='object'?{status:productionStates.includes(s.production.status)?s.production.status:'未着手',videoPrompt:typeof s.production.videoPrompt==='string'?s.production.videoPrompt.slice(0,20000):undefined,memo:typeof s.production.memo==='string'?s.production.memo.slice(0,10000):'',videoUrl:typeof s.production.videoUrl==='string'?s.production.videoUrl.slice(0,2048):'',imagePrompt:typeof s.production.imagePrompt==='string'?s.production.imagePrompt.slice(0,20000):undefined}:{}}));save()}catch(err){alert('復元できません：'+err.message)}finally{e.target.value=''}};
+render();
+</script><script>
+'use strict';
+// v0.5 additions: local-only character bible and image-to-video handoff.
+const v05Prefix='kiraviel_v05_';
+const v05Fields=['v05Identity','v05Outfit','v05Negative'];
+for(const id of v05Fields){
+ const el=document.getElementById(id);
+ el.value=localStorage.getItem(v05Prefix+id)||'';
+ el.addEventListener('input',()=>{try{localStorage.setItem(v05Prefix+id,el.value)}catch{alert('保存できません。端末の空き容量をご確認ください。')}v05Refresh()});
+}
+function v05Bible(){
+ return ['Character: '+document.getElementById('character').value,
+ 'Identity: '+(document.getElementById('v05Identity').value||'Match the approved character reference image precisely.'),
+ 'Outfit: '+(document.getElementById('v05Outfit').value||'Keep the approved reference outfit and colors.'),
+ 'Avoid: '+(document.getElementById('v05Negative').value||'identity drift, outfit changes, deformed hands, extra limbs'),
+ 'Use the approved reference image as the primary identity source; do not redesign the character.'].join('\n');
+}
+function v05ImagePrompt(shot){return [
+ 'Create ONE high-quality anime music video keyframe for the fictional project Kiraviel.',
+ 'Song: '+document.getElementById('song').value+'.',
+ v05Bible(),
+ 'Scene: '+shot.scene+'.',
+ 'Lyric cue: '+(shot.lyric||'none')+'.',
+ 'Frame aspect ratio: '+(shot.ratio||'16:9')+'.',
+ 'Keep facial features, hairstyle, costume, accessories and palette consistent with the reference.',
+ 'Cinematic composition, intentional lighting, clean anatomy, no subtitles, no watermark, no extra characters.'
+].join('\n');}
+function v05VideoPrompt(shot){return [
+ 'Animate the approved keyframe into a coherent anime music video shot.',
+ v05Bible(),
+ 'Action and camera: '+shot.scene+'.',
+ 'Duration: '+shot.duration+' seconds. Aspect ratio: '+(shot.ratio||'16:9')+'.',
+ 'Keep the same face, outfit, framing intent and palette across all frames.',
+ 'Smooth motion, stable anatomy, natural blinking and hair movement; no identity drift, no text or watermark.'
+].join('\n');}
+async function v05Copy(value,btn){try{await navigator.clipboard.writeText(value);btn.textContent='コピーしました';setTimeout(()=>btn.textContent=btn.dataset.label,1500)}catch{alert('コピーできませんでした。テキストを長押ししてコピーしてください。')}}
+const v05BibleBtn=document.getElementById('v05IdentityCopy');v05BibleBtn.dataset.label=v05BibleBtn.textContent;
+v05BibleBtn.onclick=()=>v05Copy(v05Bible(),v05BibleBtn);
+// Wrap v0.4 renderer, preserving existing production controls.
+const v05OldRender=render;
+render=function(){
+ v05OldRender();
+ const articles=document.querySelectorAll('#shots article');
+ articles.forEach((article,i)=>{
+  const shot=shots[i];if(!shot)return;
+  if(!shot.production||typeof shot.production!=='object')shot.production={};
+  const p=shot.production, panel=document.createElement('div');panel.className='v05tools';
+  const h=document.createElement('h4');h.textContent='🖼️ v0.5 画像→動画 制作支援';panel.append(h);
+  const imageLabel=document.createElement('label');imageLabel.textContent='画像生成プロンプト（編集可）';
+  const imageText=document.createElement('textarea');imageText.rows=6;
+  imageText.value=typeof p.imagePrompt==='string'?p.imagePrompt:v05ImagePrompt(shot);
+  imageText.addEventListener('change',()=>{p.imagePrompt=imageText.value;save()});
+  panel.append(imageLabel,imageText);
+  const copyImage=document.createElement('button');copyImage.textContent='画像プロンプトをコピー';copyImage.dataset.label=copyImage.textContent;
+  copyImage.onclick=()=>v05Copy(imageText.value,copyImage);panel.append(copyImage);
+  const note=document.createElement('p');note.className='hint';note.textContent='画像生成サービスへ、上のプロンプトと基準画像を手動で渡してください。画像生成APIは未接続です。';panel.append(note);
+  const imageFileLabel=document.createElement('label');imageFileLabel.textContent='採用したカット画像を一時プレビュー';
+  const imageFile=document.createElement('input');imageFile.type='file';imageFile.accept='image/*';
+  const imagePreview=document.createElement('img');imagePreview.hidden=true;imagePreview.alt='採用カット画像プレビュー';
+  let objectUrl=null;
+  imageFile.addEventListener('change',()=>{if(objectUrl)URL.revokeObjectURL(objectUrl);if(!imageFile.files[0]){imagePreview.hidden=true;return}objectUrl=URL.createObjectURL(imageFile.files[0]);imagePreview.src=objectUrl;imagePreview.hidden=false});
+  panel.append(imageFileLabel,imageFile,imagePreview);
+  const vidBtn=document.createElement('button');vidBtn.textContent='このカットの動画化プロンプトを作成';
+  vidBtn.onclick=()=>{
+   const newPrompt=v05VideoPrompt(shot);
+   if(typeof p.videoPrompt==='string'&&p.videoPrompt!==''&&!confirm('既存の動画プロンプトを上書きしますか？'))return;
+   p.videoPrompt=newPrompt;save();
+  };panel.append(vidBtn);
+  const hint=document.createElement('p');hint.className='hint';hint.textContent='動画化プロンプトを作成するとv0.4の「動画生成用プロンプト」欄に反映されます。画像ファイル自体は保存されません。';panel.append(hint);
+  article.append(panel);
+ });
+};
+function v05Refresh(){/* Character bible is used when newly building prompts; never overwrite edited prompts. */}
+// Include character bible and image prompts in v0.5 JSON backups without changing the v0.4 import format.
+const v05ExportBtn=document.getElementById('export');
+v05ExportBtn.addEventListener('click',()=>{});
+// Add separate explicit character-bible export for easy portability.
+const bibleExport=document.createElement('button');bibleExport.type='button';bibleExport.className='secondary';bibleExport.textContent='キャラクター設定をテキスト保存';
+bibleExport.onclick=()=>{const blob=new Blob([v05Bible()],{type:'text/plain;charset=utf-8'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='kiraviel-character-bible-v05.txt';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),3000)};
+v05BibleBtn.after(bibleExport);
+render();
+</script></body></html>
