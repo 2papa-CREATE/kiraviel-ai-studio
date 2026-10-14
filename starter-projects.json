@@ -1,0 +1,299 @@
+{
+  "version": "0.7",
+  "projects": [
+    {
+      "id": "860d8166-f804-4c1f-b087-fa740c915fa8",
+      "title": "試作01｜雨の日の水晶ティールーム",
+      "mode": "asmr",
+      "ratio": "9:16",
+      "style": "Photorealistic macro cinematography",
+      "brief": "注ぐ音と水晶の光を楽しむ、15秒のオリジナルASMR。実写風の架空作品。",
+      "subject": "透明な水晶のティーポットとカップ",
+      "identity": "丸いポット、短い注ぎ口、淡い紫の屈折光。カップは1個。",
+      "outfit": "木製テーブル、背景は雨の窓。暖かな間接照明。",
+      "avoid": "",
+      "sound": "No music, no speech. Soft rain ambience and delicate glass contact. Avoid harsh high-frequency sounds.",
+      "budget": 0,
+      "trials": [
+        {
+          "id": "16cde874-b116-4e3c-ba34-6159bd422bfd",
+          "provider": "",
+          "model": "Veo系／利用可能な音付きモデル",
+          "conditions": "同じ基準画像・同じカットの指示・9:16。尺と解像度と音声条件は生成前にそろえる。実際のモデル名と提供サービスは生成前に記録。",
+          "attempts": 0,
+          "credits": 0,
+          "cost": 0,
+          "costKnown": false,
+          "accepted": false,
+          "score": 0,
+          "notes": "未生成・未課金。費用と利用可能モデルは未確認。"
+        },
+        {
+          "id": "e4633c11-7fdd-4fc9-ac37-d3ba2a7e2fe9",
+          "provider": "",
+          "model": "比較候補／生成前に選択",
+          "conditions": "同じ基準画像・同じカットの指示・9:16。尺と解像度と音声条件は生成前にそろえる。実際のモデル名と提供サービスは生成前に記録。",
+          "attempts": 0,
+          "credits": 0,
+          "cost": 0,
+          "costKnown": false,
+          "accepted": false,
+          "score": 0,
+          "notes": "未生成・未課金。費用と利用可能モデルは未確認。"
+        }
+      ],
+      "shots": [
+        {
+          "id": "0ddfe1b1-978e-412b-995d-8799dbeed225",
+          "scene": "固定のマクロ構図。水晶ポットをテーブルへ静かに置く。背景の雨はぼけている。",
+          "start": 0,
+          "duration": 5,
+          "ratio": "9:16",
+          "lyric": "",
+          "sound": "Soft contact of glass on wood, rain outside.",
+          "cost": 0,
+          "production": {
+            "status": "未着手",
+            "memo": "",
+            "videoUrl": "",
+            "imagePrompt": "",
+            "videoPrompt": "",
+            "soundPrompt": ""
+          }
+        },
+        {
+          "id": "8165f0e2-7f53-4169-a86b-51412e2fad9e",
+          "scene": "同じポットからカップへ細いお茶の流れを注ぐ。液体と注ぎ口のつながりを維持。",
+          "start": 5,
+          "duration": 5,
+          "ratio": "9:16",
+          "lyric": "",
+          "sound": "Gentle continuous pouring, no music.",
+          "cost": 0,
+          "production": {
+            "status": "未着手",
+            "memo": "",
+            "videoUrl": "",
+            "imagePrompt": "",
+            "videoPrompt": "",
+            "soundPrompt": ""
+          }
+        },
+        {
+          "id": "84b99667-4fab-47a9-a4f9-641b44415882",
+          "scene": "注ぎ終え、液面の波が静まる。カップとポットは動かさず、水晶の反射光を映す。",
+          "start": 10,
+          "duration": 5,
+          "ratio": "9:16",
+          "lyric": "",
+          "sound": "Last tiny droplets then quiet rain.",
+          "cost": 0,
+          "production": {
+            "status": "未着手",
+            "memo": "",
+            "videoUrl": "",
+            "imagePrompt": "",
+            "videoPrompt": "",
+            "soundPrompt": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "07df7232-0bad-4ae3-9d81-4b43510e5b6c",
+      "title": "試作02｜木の実の小さな朝食",
+      "mode": "miniature",
+      "ratio": "9:16",
+      "style": "Handcrafted miniature diorama, macro lens",
+      "brief": "同じキャラクターと道具の大きさを保つ15秒の料理物語。切断など複雑な動作を避けた初回試作。",
+      "subject": "小さなハリネズミの料理人",
+      "identity": "茶色の針、丸い鼻、青いエプロン。イチゴは体の半分の高さ。",
+      "outfit": "木の実の家、木製の調理台、小さな白い皿。朝の暖かな光。",
+      "avoid": "",
+      "sound": "Quiet forest ambience and gentle kitchen foley. No music or speech.",
+      "budget": 0,
+      "trials": [
+        {
+          "id": "c680bdd1-f6cc-461d-b9bd-00f4f695c728",
+          "provider": "",
+          "model": "Kling系／参照画像対応",
+          "conditions": "同じ基準画像・同じカットの指示・9:16。尺と解像度と音声条件は生成前にそろえる。実際のモデル名と提供サービスは生成前に記録。",
+          "attempts": 0,
+          "credits": 0,
+          "cost": 0,
+          "costKnown": false,
+          "accepted": false,
+          "score": 0,
+          "notes": "未生成・未課金。費用と利用可能モデルは未確認。"
+        },
+        {
+          "id": "cd1d4098-3d5b-4866-9ebc-ab8ba022e89d",
+          "provider": "",
+          "model": "Seedance系／参照画像対応",
+          "conditions": "同じ基準画像・同じカットの指示・9:16。尺と解像度と音声条件は生成前にそろえる。実際のモデル名と提供サービスは生成前に記録。",
+          "attempts": 0,
+          "credits": 0,
+          "cost": 0,
+          "costKnown": false,
+          "accepted": false,
+          "score": 0,
+          "notes": "未生成・未課金。費用と利用可能モデルは未確認。"
+        }
+      ],
+      "shots": [
+        {
+          "id": "e87fc296-cc45-46a9-a0e6-fe4a310efa28",
+          "scene": "ハリネズミが小さな白い皿を調理台へ置く。全身と皿を同時に見せる。",
+          "start": 0,
+          "duration": 5,
+          "ratio": "9:16",
+          "lyric": "",
+          "sound": "A small ceramic plate placed on wood.",
+          "cost": 0,
+          "production": {
+            "status": "未着手",
+            "memo": "",
+            "videoUrl": "",
+            "imagePrompt": "",
+            "videoPrompt": "",
+            "soundPrompt": ""
+          }
+        },
+        {
+          "id": "689fb829-0b92-4958-a079-2a203c919016",
+          "scene": "準備済みのイチゴ一切れを、小さなパンの上へ両手で置く。指や皿の形を保つ。",
+          "start": 5,
+          "duration": 5,
+          "ratio": "9:16",
+          "lyric": "",
+          "sound": "Soft fruit placement, faint forest ambience.",
+          "cost": 0,
+          "production": {
+            "status": "未着手",
+            "memo": "",
+            "videoUrl": "",
+            "imagePrompt": "",
+            "videoPrompt": "",
+            "soundPrompt": ""
+          }
+        },
+        {
+          "id": "5ba2aa91-ec08-4d85-bbf7-04187f675ba3",
+          "scene": "完成した朝食を見て、ハリネズミが小さくうなずく。皿とパンは静止。",
+          "start": 10,
+          "duration": 5,
+          "ratio": "9:16",
+          "lyric": "",
+          "sound": "Quiet ambience, subtle cloth rustle.",
+          "cost": 0,
+          "production": {
+            "status": "未着手",
+            "memo": "",
+            "videoUrl": "",
+            "imagePrompt": "",
+            "videoPrompt": "",
+            "soundPrompt": ""
+          }
+        }
+      ]
+    },
+    {
+      "id": "29ee287c-a017-41a7-9395-85c7fe7b4d1b",
+      "title": "試作03｜猫のパン屋、最初のお客さん",
+      "mode": "story",
+      "ratio": "9:16",
+      "style": "Warm cinematic 3D illustration",
+      "brief": "セリフなしで海外にも伝える15秒の短編。喜びが伝わる表情と物の受け渡しを確認する。",
+      "subject": "白い猫のパン職人",
+      "identity": "丸顔、短い耳、ピンクの耳の内側、青い目。白い毛を固定。",
+      "outfit": "無地の緑のエプロン、小さな木製パン屋。文字のない看板。",
+      "avoid": "",
+      "sound": "Soft shop ambience and action foley. No dialogue, no music.",
+      "budget": 0,
+      "trials": [
+        {
+          "id": "a28dcd9c-b57e-4c5c-a6ee-4260dd1c1bb6",
+          "provider": "",
+          "model": "Kling系／参照画像対応",
+          "conditions": "同じ基準画像・同じカットの指示・9:16。尺と解像度と音声条件は生成前にそろえる。実際のモデル名と提供サービスは生成前に記録。",
+          "attempts": 0,
+          "credits": 0,
+          "cost": 0,
+          "costKnown": false,
+          "accepted": false,
+          "score": 0,
+          "notes": "未生成・未課金。費用と利用可能モデルは未確認。"
+        },
+        {
+          "id": "29932953-8ef1-424b-b164-ed92a939fdf9",
+          "provider": "",
+          "model": "Seedance系／参照画像対応",
+          "conditions": "同じ基準画像・同じカットの指示・9:16。尺と解像度と音声条件は生成前にそろえる。実際のモデル名と提供サービスは生成前に記録。",
+          "attempts": 0,
+          "credits": 0,
+          "cost": 0,
+          "costKnown": false,
+          "accepted": false,
+          "score": 0,
+          "notes": "未生成・未課金。費用と利用可能モデルは未確認。"
+        }
+      ],
+      "shots": [
+        {
+          "id": "d24ab157-0cc9-4d0a-a93a-cf50373bfe55",
+          "scene": "猫が店のカウンターに焼きたてのパンを1個置く。期待する表情。",
+          "start": 0,
+          "duration": 5,
+          "ratio": "9:16",
+          "lyric": "",
+          "sound": "Soft bread placement on a wooden counter.",
+          "cost": 0,
+          "production": {
+            "status": "未着手",
+            "memo": "",
+            "videoUrl": "",
+            "imagePrompt": "",
+            "videoPrompt": "",
+            "soundPrompt": ""
+          }
+        },
+        {
+          "id": "f44c05af-13fb-4399-b0fa-7378ce59ab59",
+          "scene": "画面外のお客さんへ、猫がパンを載せた皿をゆっくり差し出す。追加の人物や手は映さない。",
+          "start": 5,
+          "duration": 5,
+          "ratio": "9:16",
+          "lyric": "",
+          "sound": "Plate sliding softly across wood.",
+          "cost": 0,
+          "production": {
+            "status": "未着手",
+            "memo": "",
+            "videoUrl": "",
+            "imagePrompt": "",
+            "videoPrompt": "",
+            "soundPrompt": ""
+          }
+        },
+        {
+          "id": "b63ac19d-45ad-4c8c-839f-207927cc4b58",
+          "scene": "カウンターの皿がなくなった次の場面。猫がほっとして嬉しそうに目を細める。",
+          "start": 10,
+          "duration": 5,
+          "ratio": "9:16",
+          "lyric": "",
+          "sound": "Quiet shop ambience, distant door chime.",
+          "cost": 0,
+          "production": {
+            "status": "未着手",
+            "memo": "",
+            "videoUrl": "",
+            "imagePrompt": "",
+            "videoPrompt": "",
+            "soundPrompt": ""
+          }
+        }
+      ]
+    }
+  ]
+}
